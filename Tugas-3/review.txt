@@ -1,0 +1,20 @@
+1. Saran perbaikan dari AI
+Sedikit upgrade biar lebih “niat” (optional)
+
+Kalau mau kelihatan lebih pro pas dinilai, bisa tambah validasi:
+#!/bin/bash
+
+echo "Memulai backup log..."
+
+if [ ! -f syslog.txt ]; then
+  echo "File syslog.txt tidak ditemukan!"
+  exit 1
+fi
+
+mkdir -p backup-log
+cp syslog.txt backup-log/
+
+echo "Backup selesai!"
+👉 Ini ngecek dulu apakah file ada sebelum dicopy
+
+2. Pendapat: Saya setuju, penggunaan if else ini untuk melakukan pengecekan apakah file syslog.txt itu ada atau tidak. Selain itu, ini menambah insight bagi saya mengenai if else pada sh file
