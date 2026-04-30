@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Generate Artifact
 
 on:
   push:
@@ -6,17 +6,22 @@ on:
       - main
 
 jobs:
-  build:
+  build-app:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Show message
-        run: echo "Pipeline is running 🚀"
+      - name: Jalankan Proses Build
+        run: |
+          echo "Memulai proses kompilasi di mesin Cloud..."
+          mkdir dist
+          echo "<h1>Sukses! Ini adalah hasil build (Artifact) dari mesin CI/CD</h1>" > dist/index.html
+          echo "Proses Build selesai, sampah dapur telah dibuang!"
 
-      - name: Print Secret (Masked)
-        run: echo "My secret is $MY_SECRET_KEY"
-        env:
-          MY_SECRET_KEY: ${{ secrets.MY_SECRET_KEY }}
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasil-build-web
+          path: dist/
+          retention-days: 7 
