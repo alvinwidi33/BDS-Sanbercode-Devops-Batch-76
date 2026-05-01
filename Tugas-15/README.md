@@ -1,0 +1,71 @@
+## SCREENSHOT SECRETS
+![alt text](image.png)
+
+## SCREENSHOT YML
+![alt text](image-1.png)
+```
+name: CI/CD Pipeline Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Artifact
+        run: |
+          echo "Mulai build..."
+          mkdir dist
+          echo "<h1>Deploy dari CI/CD 🚀</h1>" > dist/index.html
+          echo "Build selesai!"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasil-build-web
+          path: dist/
+
+  deploy-to-vps:
+    runs-on: ubuntu-latest
+    needs: build-app
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: hasil-build-web
+          path: dist/
+
+      - name: Copy Artifact to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/*"
+          target: "/var/www/html" 
+
+      - name: Execute Command via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            echo "Deploy berhasil 🚀"
+            ls /var/www/html
+```
+## PIPELINE SUCCESS
+![alt text](image-2.png)
+
+## DEPLOY VPS
+![alt text](image-3.png)
+![alt text](image-4.png)
+**Notes:** Saya edit sedikit biar karakter roketnya terlihat
